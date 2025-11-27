@@ -1,20 +1,43 @@
 # pages/inventory_page.py
 
-# 1. IMPORTS
+# IMPORTS
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select 
 
 class InventoryPage:
     
-    # 2. Locator for the Sort Dropdown
+   
     SORT_DROPDOWN = (By.CLASS_NAME, "product_sort_container")
     
-    # 3. Locator for Product Names
+    
     INVENTORY_ITEM_NAME = (By.CLASS_NAME, "inventory_item_name")
 
-    # --- INITIALIZER ---
+    def go_to_cart(self):
+        """Finds the cart icon and uses JavaScript to force the click, ensuring navigation."""
+        
+        CART_LINK = (By.CLASS_NAME, "shopping_cart_link")
+        
+        # 1. Find the element (The cart icon object)
+        cart_icon = self.driver.find_element(*CART_LINK)
+        
+        # 2. Execute JavaScript Click: This is the most reliable way to ensure a click registers.
+        self.driver.execute_script("arguments[0].click();", cart_icon)
+
+  
     def __init__(self, driver):
         self.driver = driver
+    
+    def add_item_to_cart(self, item_name="backpack"):
+        """Clicks the button to add a specific item (default: backpack) to the cart."""
+        
+        # We define the specific locator for the backpack item
+        ADD_TO_CART_BACKPACK_BUTTON = (By.ID, "add-to-cart-sauce-labs-backpack")
+        
+        # For simplicity, we only handle the backpack for this test
+        if item_name == "backpack":
+            self.driver.find_element(*ADD_TO_CART_BACKPACK_BUTTON).click()
+        else:
+            raise NotImplementedError(f"Adding item {item_name} not yet implemented.")
 
     # --- METHODS  ---
 
